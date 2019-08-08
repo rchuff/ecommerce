@@ -1,4 +1,5 @@
 import React from 'react';
+import './Login.css';
 
 class Login extends React.Component{
   constructor(props){
@@ -7,7 +8,8 @@ class Login extends React.Component{
       username: "",
       password: "",
       regUser: "",
-      regPass: ""
+      regPass: "",
+      items: []
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
@@ -48,9 +50,26 @@ class Login extends React.Component{
     this.setState({regPass: e.target.value});
   }
 
+  componentDidMount(){
+    fetch('/api/login')
+    .then(res => res.json())
+    .then(res => {
+    this.setState({items: res});
+    });
+  }
+
   render(){
+    let items = this.state.items.map(item => {
+      return <li><img className="login-item" src={item.img} alt={item.name}/></li>
+    });
+
     return(
-      <div>
+      <div id="login-page">
+        <div>
+          <ul>
+            {items}
+          </ul>
+        </div>
         <h1>My Account</h1>
         <div className="login">
           <form onSubmit={this.handleSubmit}>
