@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Item = ({name, img, description, price}) => (
+const Item = ({name, img, description, price, addToCart}) => (
   <div className="item" style = {{
     border: "5px solid",
     borderRadius: "5px"
@@ -9,6 +9,7 @@ const Item = ({name, img, description, price}) => (
     <h3>{name}</h3>
     <h4>${price}</h4>
     <p>{description}</p>
+    <button onClick={addToCart}>Add Item</button>
   </div>
 
 )

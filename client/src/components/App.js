@@ -1,6 +1,5 @@
 //Main application component which conditionally renders
 //based on user login. Tracks the logged in user and the cart.
-//Generates API calls to the backend server.
 
 import React, {Component} from 'react';
 import './App.css';
@@ -19,24 +18,33 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      loggedIn: false,
-      cart: 0,
-      user: {}
+      loggedIn: props.loggedIn,
+      cart: [],
+      user: props.user
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
+    this.addItem = this.addItem.bind(this);
   }
 
-
-
+//Checks to see if user logged in
   handleLogin(username, password){
     return api.handleLogin.call(this,username,password);
   }
 
+//Registers new user.
   handleRegister(username, password){
     return api.handleRegister.call(this,username,password);
   }
 
+//adds item to user's cart
+  addItem(item){
+    let cart = this.state.cart.slice();
+    cart.push(item);
+    this.setState({cart});
+  }
+
+//If not logged in the user can't access any PrivateRoutes in the application.
   render(){
     return(
       <div>
@@ -54,18 +62,21 @@ class App extends Component{
               loggedIn={this.state.loggedIn}
               />
           )}/>
+
           <PrivateRoute
             component={Checkout}
             path="/checkout"
             exact
             loggedIn={this.state.loggedIn}
             user={this.state.user}
+            cart={this.state.cart}
             />
           <PrivateRoute component={About}
             path="/about"
             exact
             loggedIn={this.state.loggedIn}
             user={this.state.user}
+            cart={this.state.cart}
             />
           <PrivateRoute
             component={Home}
@@ -73,6 +84,8 @@ class App extends Component{
             exact
             loggedIn={this.state.loggedIn}
             user={this.state.user}
+            addToCart={this.addItem}
+            cart={this.state.cart}
             />
 
         </Switch>

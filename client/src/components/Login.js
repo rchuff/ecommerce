@@ -1,6 +1,7 @@
 import React from 'react';
 import './Login.css';
 
+//Handles login and registration for the user.
 class Login extends React.Component{
   constructor(props){
     super(props);
@@ -21,9 +22,9 @@ class Login extends React.Component{
 
   async handleSubmit(e){
     e.preventDefault();
-    this.setState({username: '', password: ''})
     let logTry = await this.props.login(this.state.username, this.state.password);
     if (logTry) this.props.history.push('/');
+    this.setState({username: '', password: ''})
   }
 
   handleUsername(e){
@@ -36,10 +37,9 @@ class Login extends React.Component{
 
   async handleRegister(e){
     e.preventDefault();
-    this.setState({regUser:'', regPass: ''});
     let newUser = await this.props.register(this.state.regUser, this.state.regPass);
     if (newUser) this.props.history.push("/");
-
+    this.setState({regUser:'', regPass: ''});
   }
 
   handleRegUsername(e){
@@ -50,6 +50,7 @@ class Login extends React.Component{
     this.setState({regPass: e.target.value});
   }
 
+//Grab random array of items and display them.
   componentDidMount(){
     fetch('/api/login')
     .then(res => res.json())
@@ -71,15 +72,16 @@ class Login extends React.Component{
           </ul>
         </div>
         <h1>My Account</h1>
-        <div className="login">
+        <div className="user-info">
           <form onSubmit={this.handleSubmit}>
-            <h2>Username</h2>
+            <h2>Login</h2>
+            <label htmlFor="username">Enter username</label>
             <input
               type="text"
               value={this.state.username}
               onChange= {this.handleUsername}
             />
-            <h2>Password</h2>
+          <label htmlFor="password">Enter password</label>
             <input
               type="text"
               value={this.state.password}
@@ -88,8 +90,9 @@ class Login extends React.Component{
             <input type="submit" value="Submit" />
           </form>
         </div>
-        <div className="register">
+        <div className="user-info">
           <form onSubmit={this.handleRegister}>
+            <h2>Register</h2>
             <label htmlFor="username">Enter username</label>
             <input
               type="text"

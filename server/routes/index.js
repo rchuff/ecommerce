@@ -1,53 +1,46 @@
 const db = require('../models');
 const express=require('express');
-const shuffle = require('array-shuffle')
+const shuffle = require('array-shuffle');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const sendReceipt = require('../handlers/email.js');
+const logic = require('./logic.js')
+require('dotenv').config();
+const saltRounds = 10;
 router = express.Router();
 
+//Routes for the application.
+router.get('/auth', logic.assembleToken, (req,res) => {
+  logic.verifyToken(req, res);
+
+});
+
+
 router.post('/register', (req, res) =>{
-  let newUser = new db.User({username: req.body.username, password: req.body.password});
-  newUser.save((err, newUser) => {
-    if (err) return console.log(err);
-    else res.json(newUser);
-  });
+  logic.registerUser(req, res);
 });
 
 router.route('/login')
 .get((req,res) => {
-  db.Item.find({}, (err, users)=> {
-    if (err) console.log(err);
-    else {
-
-      res.json(shuffle(users).slice(0,10));
-    }
-  });
+  logic.grabLoginItems(req,res);
 })
 .post((req, res) => {
-  db.User.findOne({ username: req.body.username}, (err, user) => {
-    if (err) console.log(err);
-    if (user){
-      if (user.password === req.body.password) res.json({
-        user,
-        pass: true
-      });
-      else res.json({
-        pass: false
-      });
-    }
-    else res.json({pass: false});
-  });
+  logic.loginUser(req, res);
 });
 
 router.get('/items/:category',(req, res) => {
-  console.log("Received");
-  console.log(req.params.category);
-  db.Item.find({category: req.params.category}, (err,docs)=>{
-    if (err) console.log(err);
-    else {
-      console.log(docs);
-      res.json(docs);
-    };
-  });
+  logic.grabCategories(req, res);
 });
+
+router.route('/order')
+.get()
+.post((req,res) => {
+  logic.newOrder(req,res);
+});
+
+
+
+
 
 
 

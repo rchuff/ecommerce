@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+//Handles all database queries and operations.
+//Contains User collection, Item collection, and Order collection
+
 mongoose.connect('mongodb://localhost:27017/ecommerce', {useNewUrlParser: true});
 
 var db = mongoose.connection;
@@ -9,8 +12,15 @@ db.once('open', function(){
 
 
   let userSchema = new mongoose.Schema({
-    username: String,
-    password: String
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
   });
 
   let User = mongoose.model('User', userSchema);
@@ -25,6 +35,19 @@ db.once('open', function(){
 
   let Item = mongoose.model('Item', itemSchema);
 
+  let orderSchema = new mongoose.Schema({
+    order: Array,
+    card: Number,
+    email: String,
+    address: String,
+    city: String,
+    state: String,
+    user: String
+  });
+
+  let Order = mongoose.model('Order', orderSchema);
+
+  module.exports.Order= Order;
   module.exports.User= User;
-  module.exports.Item=Item;
+  module.exports.Item= Item;
 });
