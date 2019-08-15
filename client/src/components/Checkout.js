@@ -2,8 +2,8 @@ import React from 'react';
 import './Checkout.css';
 import Order from './Order';
 import OrderReceipt from './OrderReceipt';
-import dotenv from 'dotenv';
 import { updateInfo } from '../api/api.js';
+import Logout from './Logout';
 
 //Checkout renders Order or OrderReceipt based on whether the order
 //has been confirmed.
@@ -25,21 +25,11 @@ class Checkout extends React.Component{
 //Update status after user finished on the Order page. Will display
 //OrderReceipt when complete.
   updateStatus(address,city,state,email,card){
-    updateInfo.call(this,address,city,state,email,card);
+    updateInfo.call(this,address,city,state,email,card,this.props.user);
   }
 
 
   render(){
-    let orderedItems = this.props.cart.map(item => (
-      <div className="order-item">
-        <img src={item.img} alt={item.name} style={{
-            width: "200px",
-            height: "200px"
-          }}/>
-        <h4>{item.name}</h4>
-        <p>{item.price}</p>
-      </div>
-    ))
 
     let total= this.props.cart.reduce((acc, nextVal) => {
       return acc + nextVal.price;
@@ -48,13 +38,15 @@ class Checkout extends React.Component{
     return (
 
         <div>
+          <Logout logout={this.props.logout} />
           {!this.state.confirmed ? (
             <Order
               {...this.state}
-              orderedItems = {orderedItems}
+              orderedItems = {this.props.cart}
               total={total}
               updateStatus={this.updateStatus}
               user={this.props.user}
+              remove={this.props.removeItem}
               />
           ) : (
             <OrderReceipt

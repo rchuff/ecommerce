@@ -1,6 +1,7 @@
 #login-page{
   text-align: center;
   margin: auto;
+  background-image: linear-gradient(to bottom right, #136881, #25A9D0);
 }
 
 .user-info {

@@ -31,12 +31,15 @@ export async function handleLogin(username, password){
 
 
 //handle new user registration.
-export async function handleRegister(username, password){
+export async function handleRegister({username, password, firstName, lastName, email}){
   let promise = await fetch('/api/register', {
     method: 'POST',
     body: JSON.stringify({
-      username: username,
-      password: password
+      username,
+      password,
+      firstName,
+      lastName,
+      email
     }),
     headers:{
       'Content-Type': 'application/json'
@@ -52,7 +55,7 @@ export async function handleRegister(username, password){
 }
 
 //Updates order information to confirm the checkout.
-export async function updateInfo(address,city,state,email,card){
+export async function updateInfo(address,city,state,email,card,user){
   let url = createURL();
 
   //Store the latitude and longitude in the location array.
@@ -74,7 +77,7 @@ export async function updateInfo(address,city,state,email,card){
   });
 
   //Post order to server
-  fetch('/api/order', {
+  fetch(`/api/order/${user._id}`, {
       method: 'POST',
       body: JSON.stringify({
         ...this.state,
@@ -95,5 +98,16 @@ export async function updateInfo(address,city,state,email,card){
     let urlAddress = address.replace(" ","+");
     let urlCity=city.replace(" ","+");
     return `https://maps.googleapis.com/maps/api/geocode/json?address=${urlAddress},${urlCity},${state}&key=${apiKey}`
+  }
+}
+
+export async function grabOrders(){
+  try{
+    let docs = await fetch(`/api/order/${this.state.user._id}`)
+    .then(res => res.json());
+
+    return docs;
+  } catch(error){
+    console.log(error);
   }
 }

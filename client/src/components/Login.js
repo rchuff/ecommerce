@@ -1,5 +1,8 @@
 import React from 'react';
 import './Login.css';
+import LoginPics from './LoginPics';
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 
 //Handles login and registration for the user.
 class Login extends React.Component{
@@ -10,109 +13,85 @@ class Login extends React.Component{
       password: "",
       regUser: "",
       regPass: "",
-      items: []
+      items: [],
+      signup: false
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUsername = this.handleUsername.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
-    this.handleRegUsername = this.handleRegUsername.bind(this);
-    this.handleRegPassword = this.handleRegPassword.bind(this);
+    this.signup = this.signup.bind(this);
   }
 
-  async handleSubmit(e){
-    e.preventDefault();
-    let logTry = await this.props.login(this.state.username, this.state.password);
+  async handleLogin(username, password){
+    let logTry = await this.props.login(username, password);
     if (logTry) this.props.history.push('/');
     this.setState({username: '', password: ''})
   }
 
-  handleUsername(e){
-    this.setState({username: e.target.value});
-  }
-
-  handlePassword(e){
-    this.setState({password: e.target.value});
-  }
-
-  async handleRegister(e){
-    e.preventDefault();
-    let newUser = await this.props.register(this.state.regUser, this.state.regPass);
+  async handleRegister(stateObj){
+    let newUser = await this.props.register(stateObj);
     if (newUser) this.props.history.push("/");
-    this.setState({regUser:'', regPass: ''});
   }
 
-  handleRegUsername(e){
-    this.setState({regUser: e.target.value});
+  signup(){
+    this.setState({signup: true});
   }
 
-  handleRegPassword(e){
-    this.setState({regPass: e.target.value});
-  }
 
-//Grab random array of items and display them.
-  componentDidMount(){
-    fetch('/api/login')
-    .then(res => res.json())
-    .then(res => {
-    this.setState({items: res});
-    });
-  }
-
+//Conditonally render the login or registration form depending
+//on the status of signup.
   render(){
-    let items = this.state.items.map(item => {
-      return <li><img className="login-item" src={item.img} alt={item.name}/></li>
-    });
-
     return(
       <div id="login-page">
-        <div>
-          <ul>
-            {items}
-          </ul>
-        </div>
-        <h1>My Account</h1>
-        <div className="user-info">
-          <form onSubmit={this.handleSubmit}>
-            <h2>Login</h2>
-            <label htmlFor="username">Enter username</label>
-            <input
-              type="text"
-              value={this.state.username}
-              onChange= {this.handleUsername}
-            />
-          <label htmlFor="password">Enter password</label>
-            <input
-              type="text"
-              value={this.state.password}
-              onChange= {this.handlePassword}
-            />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-        <div className="user-info">
-          <form onSubmit={this.handleRegister}>
-            <h2>Register</h2>
-            <label htmlFor="username">Enter username</label>
-            <input
-              type="text"
-              value={this.state.regUser}
-              onChange= {this.handleRegUsername}
-            />
-            <label htmlFor="password">Enter password</label>
-            <input
-              type="text"
-              value={this.state.regPass}
-              onChange= {this.handleRegPassword}
-            />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-
+        <LoginPics />
+        {this.state.signup ? (
+          <RegisterForm submit={this.handleRegister}/>
+        ) : (
+          <LoginForm submit={this.handleLogin}/>
+        )}
+        <button onClick={this.signup}>Create Account</button>
       </div>
-
     )
   }
 }
+
+// <h1>My Account</h1>
+// <div className="user-info">
+//   <form onSubmit={this.handleSubmit}>
+//     <h2>Login</h2>
+//     <label htmlFor="username">Enter username</label>
+//     <input
+//       type="text"
+//       value={this.state.username}
+//       onChange= {this.handleUsername}
+//     />
+//   <label htmlFor="password">Enter password</label>
+//     <input
+//       type="text"
+//       value={this.state.password}
+//       onChange= {this.handlePassword}
+//     />
+//     <input type="submit" value="Submit" />
+//   </form>
+// </div>
+// <div className="user-info">
+//   <form onSubmit={this.handleRegister}>
+//     <h2>Register</h2>
+//     <label htmlFor="username">Enter username</label>
+//     <input
+//       type="text"
+//       value={this.state.regUser}
+//       onChange= {this.handleRegUsername}
+//     />
+//     <label htmlFor="password">Enter password</label>
+//     <input
+//       type="text"
+//       value={this.state.regPass}
+//       onChange= {this.handleRegPassword}
+//     />
+//     <input type="submit" value="Submit" />
+//   </form>
+// </div>
+// </div>
+
 
 export default Login;

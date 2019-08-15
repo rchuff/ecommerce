@@ -32,8 +32,10 @@ router.get('/items/:category',(req, res) => {
   logic.grabCategories(req, res);
 });
 
-router.route('/order')
-.get()
+router.route('/order/:id')
+.get((req, res) => {
+  logic.grabOrders(req,res);
+})
 .post((req,res) => {
   logic.newOrder(req,res);
 });

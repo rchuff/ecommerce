@@ -13,7 +13,13 @@ function registerUser(req, res){
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     if (err) console.log(err);
     else {
-      let newUser = new db.User({username: req.body.username, password: hash});
+      let newUser = new db.User({
+        username: req.body.username,
+        password: hash,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email
+      });
       newUser.save((err, newUser) => {
         if (err) return console.log(err);
         else {
@@ -125,6 +131,16 @@ function newOrder(req, res){
   sendReceipt();
 }
 
+function grabOrders(req,res){
+  db.Order.find({user: req.params.id}, (err, docs)=> {
+    if (err) console.log(err);
+    else {
+      console.log(docs);
+      res.json(docs);
+    }
+  });
+}
+
 module.exports.registerUser = registerUser;
 module.exports.grabLoginItems = grabLoginItems;
 module.exports.assembleToken = assembleToken;
@@ -132,3 +148,4 @@ module.exports.verifyToken = verifyToken;
 module.exports.loginUser = loginUser;
 module.exports.grabCategories = grabCategories;
 module.exports.newOrder = newOrder;
+module.exports.grabOrders = grabOrders;

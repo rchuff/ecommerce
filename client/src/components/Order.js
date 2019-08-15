@@ -50,6 +50,17 @@ class Order extends React.Component{
   }
 
   render(){
+    let orderedItems = this.props.orderedItems.map(item => (
+      <div className="order-item">
+        <img src={item.img} alt={item.name} style={{
+            width: "200px",
+            height: "200px"
+          }}/>
+        <h4>{item.name}</h4>
+        <p>{item.price}</p>
+        <button onClick={this.props.remove.bind(this,item)}>Remove Item</button>
+      </div>
+    ))
 
     return (
       <div>
@@ -57,7 +68,7 @@ class Order extends React.Component{
           <h1>Checkout</h1>
           <h3>Order Details</h3>
           <div className="order-list">
-            {this.props.orderedItems}
+            {orderedItems}
           </div>
           <h4>Total: ${this.props.total}.00</h4>
         </div>

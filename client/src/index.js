@@ -9,9 +9,11 @@ import * as serviceWorker from './serviceWorker';
 
 verifyToken();
 
+
 //Initial API call to check whether the user is logged in or not.
 //Result is passed in as a prop to the application.
 async function verifyToken(){
+  let cart = checkCart();
   let token = sessionStorage.getItem('token');
   if(token){
       let promise = await fetch('/api/auth', {
@@ -25,22 +27,26 @@ async function verifyToken(){
         else return false;
       });
       if (promise) {
-        renderApp(true, promise.authData.user);
+        renderApp(true, promise.authData.user, cart);
       } else {
         renderApp(false)
       }
   } else {
     renderApp(false);
   }
+}
 
-
+function checkCart(){
+  let cart = sessionStorage.getItem('cart');
+  if (cart) return JSON.parse(cart);
+  else return [];
 }
 
 //render app based on token status
-function renderApp(status, user){
+function renderApp(status, user, cart){
   ReactDOM.render(
     <Router>
-      <App loggedIn={status} user={user}/>
+      <App loggedIn={status} user={user} cart= {cart}/>
     </Router>
     ,
     document.getElementById('root'));

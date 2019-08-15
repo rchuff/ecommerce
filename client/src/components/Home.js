@@ -3,6 +3,7 @@ import Item from './Item';
 import './Home.css';
 import Cart from './Cart';
 import {Link} from 'react-router-dom';
+import Logout from './Logout';
 
 let categories= ['Shirts', 'Shoes', 'Pants', 'Hats', 'Socks', 'Special'];
 
@@ -50,7 +51,9 @@ componentDidMount(){
     }
 
     return (
+
       <div id='homepage'>
+        <Logout logout={this.props.logout} />
         <Cart cart={this.props.cart} />
         <Link to="/checkout" style = {{
             backgroundColor: "#3177BD",
