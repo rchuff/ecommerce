@@ -1,12 +1,13 @@
 import React from 'react';
 
 const Cart = ({cart}) => (
-  <div>
-    <img src="images/shopping-cart.svg" alt="shopping-cart" style={{
-      width: "50px",
-      height: "50px"
+  <div style={{textAlign: "center", margin: "0 15px"}}>
+    <img src="images/cart.svg" alt="shopping-cart" style={{
+      width: "45px",
+      height: "45px",
+      margin: "auto"
     }}/>
-    <h4>{cart.length}</h4>
+  <p style={{margin: "auto", color: "white", fontSize: "1.1rem"}}>{cart.length}</p>
   </div>
 )
 

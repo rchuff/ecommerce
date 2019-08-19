@@ -1,0 +1,31 @@
+.special-items-open{
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  align-items: center;
+  align-content: center;
+  justify-content: space-around;
+}
+
+.special-items-collapse{
+  display: none;
+}
+
+@media screen and (max-width: 991.98px) {
+  .special-items-open{
+    display: none;
+  }
+
+  .special-items-collapse{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    align-items: center;
+    align-content: center;
+    justify-content: space-around;
+  }
+}
+
+li {
+  margin: 0 3%;
+}

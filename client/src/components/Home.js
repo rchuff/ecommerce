@@ -52,48 +52,41 @@ componentDidMount(){
 
     return (
 
-      <div id='homepage'>
-        <Logout logout={this.props.logout} />
-        <Cart cart={this.props.cart} />
-        <Link to="/checkout" style = {{
-            backgroundColor: "#3177BD",
-            color: "white",
-            textDecoration: "none"
-          }}>Checkout</Link>
+      <div id='homepage' className="container">
         <h1>HOMEPAGE</h1>
         <div>
           <h2>Shirts</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row'>
             {stockpile["Shirts"]}
           </div>
         </div>
         <div>
           <h2>Pants</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row'>
             {stockpile["Pants"]}
           </div>
         </div>
         <div>
           <h2>Shoes</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row'>
             {stockpile["Shoes"]}
           </div>
         </div>
         <div>
           <h2>Hats</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row'>
             {stockpile["Hats"]}
           </div>
         </div>
         <div>
           <h2>Socks</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row' >
             {stockpile["Socks"]}
           </div>
         </div>
         <div>
           <h2>Specialty Items</h2>
-          <div className = 'item-section'>
+          <div className = 'item-section row'>
             {stockpile["Special"]}
           </div>
         </div>

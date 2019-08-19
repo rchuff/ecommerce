@@ -2,7 +2,7 @@ import React from 'react';
 import './Checkout.css';
 import Order from './Order';
 import OrderReceipt from './OrderReceipt';
-import { updateInfo } from '../api/api.js';
+import { updateInfo, confirmOrder } from '../api/api.js';
 import Logout from './Logout';
 
 //Checkout renders Order or OrderReceipt based on whether the order
@@ -15,17 +15,29 @@ class Checkout extends React.Component{
       address: "",
       city:"",
       state:"",
-      email: "",
       card: 0,
-      location:[]
+      location:[],
+      receiptPage: false
     }
     this.updateStatus = this.updateStatus.bind(this);
+    this.confirmOrder = this.confirmOrder.bind(this);
+    this.editOrder=this.editOrder.bind(this);
   }
 
 //Update status after user finished on the Order page. Will display
 //OrderReceipt when complete.
-  updateStatus(address,city,state,email,card){
-    updateInfo.call(this,address,city,state,email,card,this.props.user);
+  updateStatus(address,city,state,card){
+    updateInfo.call(this,address,city,state,card,this.props.user);
+    window.scrollTo(0,0);
+  }
+
+  confirmOrder(address,city,state,card){
+    confirmOrder.call(this,address,city,state,card, this.props.user);
+    this.props.clearCart();
+  }
+
+  editOrder(){
+    this.setState({receiptPage: false});
   }
 
 
@@ -38,8 +50,7 @@ class Checkout extends React.Component{
     return (
 
         <div>
-          <Logout logout={this.props.logout} />
-          {!this.state.confirmed ? (
+          {!this.state.receiptPage ? (
             <Order
               {...this.state}
               orderedItems = {this.props.cart}
@@ -54,6 +65,9 @@ class Checkout extends React.Component{
               orderedItems={this.props.cart}
               total={total}
               user={this.props.user}
+              confirmOrder={this.confirmOrder}
+              confirmed={this.state.confirmed}
+              editOrder={this.editOrder}
               />
           )
         }

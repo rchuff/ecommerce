@@ -10,8 +10,6 @@ import {
 //at order location.
 const Map = withScriptjs(withGoogleMap(props => (
   <div>
-    <h1>{props.title}</h1>
-    <h2>{props.location[0]}</h2>
     <GoogleMap
       defaultZoom={15}
       defaultCenter={{ lat: props.location[0],lng: props.location[1]}}
@@ -26,7 +24,8 @@ export default function GMaps(props){
   return (
     <div style={{
       width: '50vw',
-      height: '50vh'
+      height: '50vh',
+      margin: "auto"
     }}>
       <Map
         title={props.title}

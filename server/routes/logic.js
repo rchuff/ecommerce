@@ -24,9 +24,9 @@ function registerUser(req, res){
         if (err) return console.log(err);
         else {
           //Assing token and respond with user information.
-          jwt.sign({newUser}, `${process.env.SECRET_KEY}`, { expiresIn: '1h' }, (err, token) => {
+          jwt.sign({user: newUser}, `${process.env.SECRET_KEY}`, { expiresIn: '1h' }, (err, token) => {
             res.json({
-              newUser,
+              user: newUser,
               pass: true,
               token
             });
@@ -114,6 +114,7 @@ function assembleToken(req, res, next) {
   }
 }
 
+//Adds order to database and emails user the receipt.
 function newOrder(req, res){
   let newOrder = new db.Order({
     address: req.body.address,
@@ -122,20 +123,23 @@ function newOrder(req, res){
     email: req.body.email,
     card: req.body.card,
     order: req.body.order,
-    user: req.body.user._id
+    user: req.body.user
   });
   newOrder.save((err, order) => {
     if (err) console.log(err);
-    else res.json(order);
+    else {
+      res.json(order);
+      sendReceipt(order,req.body.user);
+    }
   });
-  sendReceipt();
+
 }
 
+//Grab orders and sort by date for user account
 function grabOrders(req,res){
-  db.Order.find({user: req.params.id}, (err, docs)=> {
+  db.Order.find({user: req.params.id}).sort({date: -1}).exec(function(err, docs){
     if (err) console.log(err);
     else {
-      console.log(docs);
       res.json(docs);
     }
   });

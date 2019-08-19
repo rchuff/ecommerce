@@ -19,7 +19,7 @@ let items = [
     category: "Shoes",
     name: "Adidas Shoe",
     price: 100.00,
-    img:"adidas_shoe.jpg",
+    img:"images/adidas_shoe.jpg",
     description: "White Adidas ultra boost shoe."
   },
   {

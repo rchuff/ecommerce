@@ -1,0 +1,17 @@
+.info-table{
+  text-align: left;
+  background-color: #9e9e9e;
+  width: 30%
+}
+
+@media screen and (max-width: 991.98px){
+  .info-table{
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .info-table{
+    width: 100%
+  }
+}

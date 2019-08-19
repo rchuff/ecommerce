@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 //Handles all database queries and operations.
 //Contains User collection, Item collection, and Order collection
 
-mongoose.connect('mongodb://localhost:27017/ecommerce', {useNewUrlParser: true});
+
+mongoose.connect(`mongodb+srv://admin-ryan:${process.env.MONGO_PASS}@cluster0-kzf2g.mongodb.net/ecommerceDB?retryWrites=true&w=majority`, {useNewUrlParser: true});
+
+
 
 var db = mongoose.connection;
 
@@ -54,7 +58,11 @@ db.once('open', function(){
     address: String,
     city: String,
     state: String,
-    user: String
+    user: String,
+    date: {
+      type: Date,
+      default: Date.now
+    }
   });
 
   let Order = mongoose.model('Order', orderSchema);

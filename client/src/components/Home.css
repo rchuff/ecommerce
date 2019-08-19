@@ -3,17 +3,8 @@
   margin: auto;
 }
 
-.hoverCart{
-  position: absolute;
-  width: 100%;
-  opacity: 0;
-  transition: 0.5s ease;
-
-}
-
-.item{
-  width: 20vw;
-  height: 30vh;
+#homepage > *{
+  margin: auto;
 }
 
 .item > img {

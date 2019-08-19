@@ -49,13 +49,13 @@ export async function handleRegister({username, password, firstName, lastName, e
   //User successfully registers we store the token from jwt
   //locally in the session.
   this.setState({loggedIn: true});
-  this.setState({user: promise});
+  this.setState({user: promise.user});
   sessionStorage.setItem('token', promise.token);
   return true;
 }
 
-//Updates order information to confirm the checkout.
-export async function updateInfo(address,city,state,email,card,user){
+//Updates order information so user can confirm the checkout.
+export async function updateInfo(address,city,state,card,user){
   let url = createURL();
 
   //Store the latitude and longitude in the location array.
@@ -64,11 +64,10 @@ export async function updateInfo(address,city,state,email,card,user){
 
 //Update state to move to OrderReceipt page.
   this.setState({
-    confirmed: !this.state.confirmed,
+    receiptPage: true,
     address,
     city,
     state,
-    email,
     card,
     location: [
       res.results[0].geometry.location.lat,
@@ -76,8 +75,21 @@ export async function updateInfo(address,city,state,email,card,user){
     ]
   });
 
+  //Generate url for google geolocation to use in the google maps API.
+    function createURL() {
+      let apiKey = 'AIzaSyDTuJCB4eWdnFlpf2_aqwMHI8B4KoDDscI'
+      let urlAddress = address.replace(" ","+");
+      let urlCity=city.replace(" ","+");
+      return `https://maps.googleapis.com/maps/api/geocode/json?address=${urlAddress},${urlCity},${state}&key=${apiKey}`
+    }
+}
+
+//Post the order to the server.
+export async function confirmOrder(address,city,state,card,user){
+  this.setState({confirmed: true});
+
   //Post order to server
-  fetch(`/api/order/${user._id}`, {
+  await fetch(`/api/order/${user._id}`, {
       method: 'POST',
       body: JSON.stringify({
         ...this.state,
@@ -87,20 +99,12 @@ export async function updateInfo(address,city,state,email,card,user){
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .then(res => {
-      console.log(res);
-    });
+    }).then(res => res.json());
 
-//Generate url for google geolocation to use in the google maps API.
-  function createURL() {
-    let apiKey = 'AIzaSyDTuJCB4eWdnFlpf2_aqwMHI8B4KoDDscI'
-    let urlAddress = address.replace(" ","+");
-    let urlCity=city.replace(" ","+");
-    return `https://maps.googleapis.com/maps/api/geocode/json?address=${urlAddress},${urlCity},${state}&key=${apiKey}`
-  }
+    sessionStorage.setItem('cart', '');
 }
 
+//Grab orders for user's account page.
 export async function grabOrders(){
   try{
     let docs = await fetch(`/api/order/${this.state.user._id}`)

@@ -21,7 +21,7 @@ class RegisterForm extends React.Component{
   async handleRegister(e){
     e.preventDefault();
     this.props.submit(this.state);
-    this.setState({username:'', password: ''});
+    this.setState({username:'', password: '', firstName:'', lastName: '', email: ''});
   }
 
   handleUsername(e){
@@ -85,7 +85,7 @@ class RegisterForm extends React.Component{
             onChange= {this.handlePassword}
             required
           />
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit" className="btn btn-primary"/>
         </form>
       </div>
     </div>

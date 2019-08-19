@@ -29,23 +29,24 @@ class LoginForm extends React.Component{
   render(){
     return (
       <div>
-        <h1>My Account</h1>
         <div className="user-info">
           <form onSubmit={this.handleSubmit}>
             <h2>Login</h2>
-            <label htmlFor="username">Enter username</label>
             <input
               type="text"
               value={this.state.username}
               onChange= {this.handleUsername}
+              placeholder="Username"
+              required
             />
-          <label htmlFor="password">Enter password</label>
             <input
               type="password"
               value={this.state.password}
               onChange= {this.handlePassword}
+              placeholder="Password"
+              required
             />
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit" className="btn btn-primary"/>
           </form>
         </div>
       </div>

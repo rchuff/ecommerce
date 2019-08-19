@@ -33,22 +33,43 @@ class Login extends React.Component{
   }
 
   signup(){
-    this.setState({signup: true});
+    this.setState({signup: !this.state.signup});
   }
 
 
 //Conditonally render the login or registration form depending
 //on the status of signup.
   render(){
+
+    let regstyle = {
+      backgroundSize: "cover",
+      paddingBottom: "10px"
+    }
+
+    let logStyle = {
+      backgroundSize: "cover",
+      height: "100vh",
+      width: "100vw"
+    }
+
     return(
-      <div id="login-page">
+      <div id="login-page" style={this.state.signup ? regstyle : logStyle}>
+        <h1 style={{color: "white"}}>Welcome to Ecommerce.com</h1>
         <LoginPics />
         {this.state.signup ? (
-          <RegisterForm submit={this.handleRegister}/>
+          <div className = "register-form">
+            <RegisterForm submit={this.handleRegister}/>
+            <p>Already have an account?</p>
+            <button className="btn btn-light" onClick={this.signup}>Login</button>
+          </div>
         ) : (
-          <LoginForm submit={this.handleLogin}/>
+          <div className = "login-form">
+            <LoginForm submit={this.handleLogin}/>
+            <p>New user?</p>
+            <button className="btn btn-light" onClick={this.signup}>Create Account</button>
+          </div>
         )}
-        <button onClick={this.signup}>Create Account</button>
+
       </div>
     )
   }

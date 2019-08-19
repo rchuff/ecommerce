@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import './App.css';
 import {Link} from 'react-router-dom';
 import {
-  Switch, Route
+  Switch, Route, Redirect
 } from 'react-router-dom';
 import Home from './Home';
 import Account from './Account';
@@ -13,6 +13,7 @@ import Checkout from './Checkout';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
 import * as api from '../api/api';
+import Navbar from './Navbar.js';
 
 class App extends Component{
   constructor(props){
@@ -28,6 +29,7 @@ class App extends Component{
     this.logout = this.logout.bind(this);
     this.grabOrders = this.grabOrders.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.clearCart = this.clearCart.bind(this);
   }
 
   static defaultProps = {
@@ -64,13 +66,12 @@ class App extends Component{
 
   async grabOrders(){
     let orders = await api.grabOrders.call(this);
-    console.log(`The orders: ${orders}`)
     return orders;
   }
 
-  removeItem(orderItem){
-    let newCart = this.state.cart.filter(item => {
-      if (orderItem._id === item._id) return false
+  removeItem(orderItem, orderIndex){
+    let newCart = this.state.cart.filter((item, idx) => {
+      if (orderItem._id === item._id && orderIndex === idx) return false
       else return true
     });
     this.setState({cart: newCart}, ()=> {
@@ -78,24 +79,34 @@ class App extends Component{
     });
   }
 
+  clearCart(){
+    this.setState({cart: []});
+  }
+
 //If not logged in the user can't access any PrivateRoutes in the application.
+//If logged in user can't access login page.
   render(){
     return(
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="/account">Account</Link>
-        <Link to="/checkout">Checkout</Link>
-        <Link to="/login">Login</Link>
+      <div id="application">
+        {this.state.loggedIn ? (
+          <Navbar
+            cart={this.state.cart}
+            logout={this.logout}
+            />
+        ) : <div></div>}
+
 
         <Switch>
           <Route path="/login" render={props => (
+              !this.state.loggedIn ?
             <Login
               {...props}
+              loggedIn={this.state.loggedIn}
               login={this.handleLogin}
               register={this.handleRegister}
-              loggedIn={this.state.loggedIn}
-              />
+            /> : <Redirect to="/" />
           )}/>
+
 
           <PrivateRoute
             component={Checkout}
@@ -106,6 +117,7 @@ class App extends Component{
             cart={this.state.cart}
             logout={this.logout}
             removeItem={this.removeItem}
+            clearCart = {this.clearCart}
             />
           <PrivateRoute component={Account}
             path="/account"
@@ -133,5 +145,12 @@ class App extends Component{
     )
   }
 }
+//
+// <div>
+// <Link to="/">Home</Link>
+// <Link to="/account">Account</Link>
+// <Link to="/checkout">Checkout</Link>
+// </div>
+
 
 export default App;

@@ -12,40 +12,52 @@ class LoginPics extends React.Component {
   componentDidMount(){
 
   //Grab random array of items and display them.
-    fetch('/api/login')
-    .then(res => res.json())
-    .then(res => {
-    this.setState({items: res}, () => {
-      console.log(this.state.items);
-    });
-    });
+    // fetch('/api/login')
+    // .then(res => res.json())
+    // .then(res => {
+    // this.setState({items: res}, () => {
+    //   console.log(this.state.items);
+    // });
+    // });
   }
 
   render(){
-    let items = this.state.items.map((item,idx) => (
-      <div className={idx===0 ? "carousel-item active" : "carousel-item"}>
-        <img
-        src={item.img}
-        className="d-block"
-        alt={item.img}
-        style={{
-          height: "400px",
-          width: "400px",
-          margin: "auto"
-        }} />
-      </div>
-    ))
+    const imgStyle={
+      height: "100%",
+      width: "100%",
+      margin: "auto"
+    }
 
     return(
       <div>
         <div id="carousel" className="carousel slide" data-ride="carousel"
         style={{
-          height: "30%",
-          width: "30%",
+          height: "15%",
+          width: "15%",
           margin: "auto"
         }}>
           <div className="carousel-inner">
-            {items}
+            <div className="carousel-item active">
+              <img
+              src="images/online-shop.svg"
+              className="d-block"
+              alt="shop"
+              style={imgStyle} />
+            </div>
+            <div className="carousel-item">
+              <img
+              src="images/delivery-truck.svg"
+              className="d-block"
+              alt="truck"
+              style={imgStyle} />
+            </div>
+            <div className="carousel-item">
+              <img
+              src="images/house.svg"
+              className="d-block"
+              alt="house"
+              style={imgStyle} />
+            </div>
           </div>
         </div>
       </div>
